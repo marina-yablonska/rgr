@@ -65,7 +65,7 @@ public class Waiter extends Actor {
 		while (getDispatcher().getCurrentTime() <= finishTime) {
 			queueFreeWaiter.addLast(this);
 			try {
-				waitForCondition(isWork, "Має бути відвідувач");
+				waitForCondition(isWork, "Має бути робота");
 			} catch (DispatcherFinishException e) {
 				return;
 			} 

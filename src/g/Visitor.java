@@ -10,28 +10,23 @@ import rnd.Randomable;
 
 public class Visitor extends Actor {
 
-	int id_Visitor;
-
-	// private double waitingForWaiter;
 	private double waiterMaxTime;
-	// private double waitingForOrder;
 	private double orderMaxTime;
 	private Randomable rnd;
 	private double birthTime;
 	private String name;
 	private Store goneVisitorCount;
-	private BooleanSupplier c;
-	private BooleanSupplier c2;
-	private QueueForTransactions<Visitor> waitingForOrder;
 	private Store eatingVisitor;
 	private boolean food = false;
+	private BooleanSupplier c;
+	private BooleanSupplier c2;
+	private int maxSits;
 
+	private QueueForTransactions<Visitor> waitingForOrder;
 	private QueueForTransactions<Visitor> queueNewVisitor;
 	private QueueForTransactions<Visitor> visitorInCafe;
 	private QueueForTransactions<Visitor> visitorWaitingForWaiter;
-
-	private int maxSits;
-
+	
 	public double getBirthTime() {
 		return birthTime;
 	}
@@ -44,18 +39,16 @@ public class Visitor extends Actor {
 	public Visitor(String name, MainGUI gui, TestCafeModel model) {
 		super();
 		setNameForProtocol(name);
-		queueNewVisitor = model.getQueueNewVisitor();
-		goneVisitorCount = model.getGoneVisitorCount();
-		rnd = gui.getChooseRandomCookingTime().getRandom();
-		waiterMaxTime = gui.getChooseDataMaxWaiting().getDouble();
-		orderMaxTime = gui.getChooseDataMaxCooking().getDouble();
-		eatingVisitor = model.getEatingVisitor();
-		visitorInCafe = model.getVisitorInCafe();
-		visitorWaitingForWaiter = model.getVisitorWaitingForWaiter();
-		waitingForOrder = model.getWaitingForOrder();
-		// setWaitingForVisitorHisto(model.getWaitingForVisitorHisto());
-		maxSits = gui.getChooseDataSits().getInt();
-
+		queueNewVisitor = model.getQueueNewVisitor(); // черга нових візіторів
+		goneVisitorCount = model.getGoneVisitorCount(); // черга візіторів, що пішли не дочекавшись
+		rnd = gui.getChooseRandomCookingTime().getRandom(); // затримка на споживання страви
+		waiterMaxTime = gui.getChooseDataMaxWaiting().getDouble(); // критичний час заходу в кафе 
+		orderMaxTime = gui.getChooseDataMaxCooking().getDouble(); // критичний час очікування страви
+		eatingVisitor = model.getEatingVisitor(); // Store візіторів, що їдять
+		visitorInCafe = model.getVisitorInCafe(); // візітори у кафе (повний час)
+		visitorWaitingForWaiter = model.getVisitorWaitingForWaiter(); //візітори чекають на офіціанта
+		waitingForOrder = model.getWaitingForOrder(); //візітори чекають на замовлення
+		maxSits = gui.getChooseDataSits().getInt(); // кількість місць у кафе
 	}
 
 	private void initConditions() {
@@ -77,15 +70,18 @@ public class Visitor extends Actor {
 		waitForConditionOrHoldForTime(c, "Мають бути місця в кафе", waiterMaxTime);
 
 		// У КАФЕ
+		
 		// візітор зайшов у кафе, видаляє себе з черги на вхід у кафе
 		queueNewVisitor.remove(this);
 		
-		// якщо місця були і 
+		// якщо місця були і відвідувач потрапив к кафе до перебільшення критичного часу
 		if (c.getAsBoolean()) {
-			// новий візітор у кафе
+			// додає себе у чергу візіторів всередині кафе
 			visitorInCafe.add(this);
 			// додає себе у чергу візіторів на обслуговування
 			visitorWaitingForWaiter.add(this);
+			
+		// якщо місця не було і критичний час перебільшено 	
 		} else {
 			// +1 у Store відвідувачів, що пішли
 			goneVisitorCount.add(1);
@@ -93,21 +89,25 @@ public class Visitor extends Actor {
 					.printToProtocol(getNameForProtocol() + "Відвідувач не дочекався обслуговування і залишив кафе");
 			return;
 		}
-
+		// перевірка умови, що офіціант має принести страву
+		// orderMaxTime - критичний час на очікування страви
 		waitForConditionOrHoldForTime(c2, "Має бути їжа", orderMaxTime);
 		// чекає на їжу
 		waitingForOrder.remove(this);
 
+		// якщо страву принесли до перебільшення критичного часу
 		if (c2.getAsBoolean()) {
 			// додає себе у Store відвідувачів, що їдять
 			eatingVisitor.add(1);
+			//затримка на споживання страви
 			holdForTime(rnd.next());
-			// поїв і віднімає зі Store відвідувачів, що їдять
+			// поїв і віднімає себе зі Store відвідувачів, що їдять
 			eatingVisitor.remove(1);
 			getDispatcher().printToProtocol(getNameForProtocol() + "Відвідувач розрахувався і залишив кафе");
+			
+		// критичний час на очікування страви перебільшено
 		} else {
-			// візітор не дочекався замовлення і додав себе у Store
-			// відвідувачів, що пішли
+			// додав себе у Store відвідувачів, що пішли
 			goneVisitorCount.add(1);
 			getDispatcher().printToProtocol(getNameForProtocol() + "Відвідувач не дочекався замовлення і залишив кафе");
 		}
