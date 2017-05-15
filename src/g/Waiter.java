@@ -70,14 +70,14 @@ public class Waiter extends Actor {
 				waitForCondition(isWork, "Має бути робота");
 			} catch (DispatcherFinishException e) {
 				return;
-			} 
+			} 	
 			//офіціант видаляє себе з черги вільних офіціантів
-			queueFreeWaiter.remove(this);
+			//queueFreeWaiter.remove(this);
 			
 			//перевірка виконання умови на появу відвідувача
 			if (isVisitor.getAsBoolean()) {
 				// затримка, поки офіціант підійде до візітора
-				holdForTime(rnd.next());
+				//holdForTime(rnd.next());	
 				getDispatcher().printToProtocol(getNameForProtocol() + "Приймає замовлення");
 
 				// видалення візітора з черги на очікування обслуговування

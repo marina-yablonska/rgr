@@ -218,7 +218,7 @@ public class MainGUI extends JFrame {
 		panelTest.add(diagramEatingVisitor);
 
 		diagramChief = new Diagram();
-		diagramChief.setVerticalMaxText("2");
+		diagramChief.setVerticalMaxText("10");
 		diagramChief.setBounds(343, 163, 343, 164);
 		panelTest.add(diagramChief);
 		diagramChief.setHorizontalMaxText("50");
@@ -228,7 +228,7 @@ public class MainGUI extends JFrame {
 		gbl_diagramChief.columnWeights = new double[] { 0.0, 0.0, 0.0 };
 		gbl_diagramChief.columnWidths = new int[] { 9, 0, 289 };
 		diagramChief.getDiagramPanel().setBackground(new Color(255, 255, 204));
-		diagramChief.setTitleText("\u0427\u0435\u0440\u0433\u0430 \u0437\u0430\u043C\u0432\u043B\u0435\u043D\u044C \u043D\u0430 \u043A\u0443\u0445\u043D\u0456");
+		diagramChief.setTitleText("\u0427\u0435\u0440\u0433\u0430 \u0437\u0430\u043C\u043E\u0432\u043B\u0435\u043D\u044C \u043D\u0430 \u043A\u0443\u0445\u043D\u0456");
 		diagramChief.setPainterColor(Color.ORANGE);
 		diagramChief.setGridColor(new Color(204, 204, 204));
 
@@ -381,8 +381,7 @@ public class MainGUI extends JFrame {
 				getDiagramEatingVisitor().setVerticalMaxText(v);
 				getDiagramQueueVisitor().setVerticalMaxText(v);
 				getDiagramWaitingForOrder().setVerticalMaxText(v);
-				String c = chooseDataChief.getText();
-				getDiagramChief().setVerticalMaxText(c);
+				getDiagramChief().setVerticalMaxText(v);
 			}
 		} catch (Exception e) {
 		}

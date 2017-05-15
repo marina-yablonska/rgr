@@ -15,7 +15,7 @@ import widgets.experiments.IExperimentable;
 import widgets.stat.IStatisticsable;
 import widgets.trans.ITransProcesable;
 
-public class TestCafeModel implements IStatisticsable, IExperimentable{
+public class TestCafeModel implements IStatisticsable, IExperimentable {
 
 	private Dispatcher dispatcher;
 	private MainGUI gui;
@@ -41,7 +41,7 @@ public class TestCafeModel implements IStatisticsable, IExperimentable{
 	private QueueForTransactions<Visitor> visitorInCafe;
 	private QueueForTransactions<Visitor> visitorWaitingForWaiter;
 	private QueueForTransactions<Visitor> waitingForOrder;
-	
+
 	private DiscretHisto histoForQueueFreeWaiter;
 	private DiscretHisto histoForQueueNewVisitor;
 	private DiscretHisto histoForQueueToChief;
@@ -147,7 +147,7 @@ public class TestCafeModel implements IStatisticsable, IExperimentable{
 		}
 		return visitorWaitingForWaiter;
 	}
-	
+
 	public QueueForTransactions<Visitor> getQueueNewVisitor() {
 		if (queueNewVisitor == null) {
 			queueNewVisitor = new QueueForTransactions<Visitor>();
@@ -177,7 +177,7 @@ public class TestCafeModel implements IStatisticsable, IExperimentable{
 		}
 		return queueToChief;
 	}
-	
+
 	public QueueForTransactions<Visitor> getVisitorInCafe() {
 		if (visitorInCafe == null) {
 			visitorInCafe = new QueueForTransactions<Visitor>();
@@ -193,14 +193,13 @@ public class TestCafeModel implements IStatisticsable, IExperimentable{
 			histoForVisitorInCafe = new DiscretHisto();
 		return histoForVisitorInCafe;
 	}
-	
-	
+
 	private DiscretHisto getHistoVisitorWaitingForWaiter() {
 		if (histoVisitorWaitingForWaiter == null)
 			histoVisitorWaitingForWaiter = new DiscretHisto();
 		return histoVisitorWaitingForWaiter;
 	}
-	
+
 	private DiscretHisto getHistoForQueueNewVisitor() {
 		if (histoForQueueNewVisitor == null)
 			histoForQueueNewVisitor = new DiscretHisto();
@@ -264,7 +263,6 @@ public class TestCafeModel implements IStatisticsable, IExperimentable{
 		return eatingVisitor;
 	}
 
-	
 	public QueueForTransactions<Visitor> getWaitingForOrder() {
 		if (waitingForOrder == null) {
 			waitingForOrder = new QueueForTransactions<Visitor>();
@@ -304,6 +302,7 @@ public class TestCafeModel implements IStatisticsable, IExperimentable{
 		else
 			dispatcher.setProtocolFileName("");
 	}
+
 	@Override
 	public void initForStatistics() {
 	}
@@ -314,14 +313,18 @@ public class TestCafeModel implements IStatisticsable, IExperimentable{
 		map.put("Гістограма для черги вільних офіціантів", getHistoForQueueFreeWaiter());
 		map.put("Гістограма для черги відвідувачів, що чекають на вільного офіціанта", getHistoForQueueNewVisitor());
 		map.put("Гістограма для черги замовлень на приготування", getHistoForQueueToChief());
-//		map.put("Гістограма для затримки на очікування офіціанта відвідувачем", getHistoWaitingForWaiter());
+		// map.put("Гістограма для затримки на очікування офіціанта
+		// відвідувачем", getHistoWaitingForWaiter());
 		map.put("Гістограма для затримки на очікування відвідувача офіціантом", getHistoForQueueNewVisitor());
-//		map.put("Гістограма для затримки на приготування одного замовлення", getHistoCookingTime());
-//		map.put("Гістограма для затримки на тривалість трапези", getHistoEatingTime());
-//		map.put("Гістограма для затримки на очікування замовлення відвідувачем", getHistoWaitingForOrder());
+		// map.put("Гістограма для затримки на приготування одного замовлення",
+		// getHistoCookingTime());
+		// map.put("Гістограма для затримки на тривалість трапези",
+		// getHistoEatingTime());
+		// map.put("Гістограма для затримки на очікування замовлення
+		// відвідувачем", getHistoWaitingForOrder());
 		return map;
 	}
-	
+
 	@Override
 	public void initForExperiment(double factor) {
 		multiWaiter.setNumberOfClones((int) factor);
@@ -332,12 +335,17 @@ public class TestCafeModel implements IStatisticsable, IExperimentable{
 		Map<String, Double> map = new HashMap<>();
 		map.put("Черга вільних офіціантів від їх к-сті", getHistoForQueueFreeWaiter().getAverage());
 		map.put("Черга нових відвідувачів від к-сті офіціантів", getHistoForQueueNewVisitor().getAverage());
-//		map.put("Черга замовлень на приготування", getHistoForQueueToChief().getAverage());
-		map.put("Час очікування відвідувачем обслуговування від к-сті офіціантів", getHistoWaitingForWaiter().getAverage());
+		// map.put("Черга замовлень на приготування",
+		// getHistoForQueueToChief().getAverage());
+		map.put("Час очікування відвідувачем обслуговування від к-сті офіціантів",
+				getHistoWaitingForWaiter().getAverage());
 		map.put("Час очікування офіціантом відвідувача від к-сті офіціантів", getHistoWaitingForVisitor().getAverage());
-//		map.put("Затримка на приготування одного замовлення", getHistoCookingTime().getAverage());
-//		map.put("Затримка на тривалість трапези", getHistoEatingTime().getAverage());
-//		map.put("Затримка на очікування замовлення відвідувачем", getHistoWaitingForOrder().getAverage());
+		// map.put("Затримка на приготування одного замовлення",
+		// getHistoCookingTime().getAverage());
+		// map.put("Затримка на тривалість трапези",
+		// getHistoEatingTime().getAverage());
+		// map.put("Затримка на очікування замовлення відвідувачем",
+		// getHistoWaitingForOrder().getAverage());
 		return map;
 	}
 }
