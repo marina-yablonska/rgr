@@ -60,19 +60,23 @@ public class Waiter extends Actor {
 
 	@Override
 	protected void rule() {
+		//перевірка двох умов:чергу відвідувачів,що чекають на офіціанта і чергу готових замовлень
 		initConditions();
-
 		while (getDispatcher().getCurrentTime() <= finishTime) {
+			//Офіціант додає себе до черги вільних
 			queueFreeWaiter.addLast(this);
 			try {
+				//чекає до появи відвідувача
 				waitForCondition(isWork, "Має бути відвідувач");
 			} catch (DispatcherFinishException e) {
 				return;
 			} 
+			//офіціант видаляє себе з черги вільних
 			queueFreeWaiter.remove(this);
+			//перевірка виконання умови на появу відвідувача
 			if (isVisitor.getAsBoolean()) {
 				
-				// holdForTime(rnd.next());
+				holdForTime(rnd.next());
 				getDispatcher().printToProtocol(getNameForProtocol() + "Приймає замовлення");
 
 				// видалення візітора з черги на очікування обслуговування
@@ -84,7 +88,10 @@ public class Waiter extends Actor {
 			}
 
 			else {
+				//перевірка виконання умови на появу готових замовлень у черзі
+				//видалення готового замовлення з черги
 				Visitor visitor = readyOrderAmount.removeFirst();
+				//перевірка черги на наявність відвідувача,що чекає 
 				if (waitingForOrder.contains(visitor)) {
 					visitor.setFood(true);
 					holdForTime(rnd.next());
