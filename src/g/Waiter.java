@@ -63,19 +63,20 @@ public class Waiter extends Actor {
 		//перевірка двох умов:чергу відвідувачів,що чекають на офіціанта і чергу готових замовлень
 		initConditions();
 		while (getDispatcher().getCurrentTime() <= finishTime) {
-			//Офіціант додає себе до черги вільних
+			//Офіціант додає себе до черги вільних офіціантів
 			queueFreeWaiter.addLast(this);
 			try {
 				//чекає до появи відвідувача
-				waitForCondition(isWork, "Має бути відвідувач");
+				waitForCondition(isWork, "Має бути робота");
 			} catch (DispatcherFinishException e) {
 				return;
 			} 
-			//офіціант видаляє себе з черги вільних
+			//офіціант видаляє себе з черги вільних офіціантів
 			queueFreeWaiter.remove(this);
+			
 			//перевірка виконання умови на появу відвідувача
 			if (isVisitor.getAsBoolean()) {
-				
+				// затримка, поки офіціант підійде до візітора
 				holdForTime(rnd.next());
 				getDispatcher().printToProtocol(getNameForProtocol() + "Приймає замовлення");
 
@@ -86,16 +87,19 @@ public class Waiter extends Actor {
 				// додати візітора в чергу до кухаря
 				queueToChief.add(visitor);  
 			}
-
-			else {
-				//перевірка виконання умови на появу готових замовлень у черзі
+			
+			//перевірка виконання умови на появу готових замовлень у черзі
+			else {				
 				//видалення готового замовлення з черги
 				Visitor visitor = readyOrderAmount.removeFirst();
-				//перевірка черги на наявність відвідувача,що чекає 
+				//перевірка черги на наявність відвідувача,що чекає (що він є у кафе)
 				if (waitingForOrder.contains(visitor)) {
+					// умова, завдяки якій візітор розуміє, що йому принесли страву
 					visitor.setFood(true);
+					// затримка на винос страви
 					holdForTime(rnd.next());
 					getDispatcher().printToProtocol(getNameForProtocol() + "Виносить замовлення і розраховується");
+				// якщо цього відвідувача немає у кафе
 				} else
 					getDispatcher().printToProtocol(getNameForProtocol() + "Цього відвідувача немає в кафе");
 			}

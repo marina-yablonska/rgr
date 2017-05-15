@@ -7,8 +7,6 @@ import rnd.Randomable;
 
 import java.util.function.BooleanSupplier;
 
-import g.Order;
-
 public class Chief extends Actor {
 
 	private double finishTime;
@@ -30,6 +28,7 @@ public class Chief extends Actor {
 	}
 
 	private void initConditions() {
+		// черга замовлень не пуста
 		isOrder = () -> queueToChief.size() > 0;
 	}
 
@@ -44,10 +43,12 @@ public class Chief extends Actor {
 			} catch (DispatcherFinishException e) {
 				return;
 			}
+			// вилучає перше замовлення (візітора) з черги замовлень
 			Visitor order = queueToChief.removeFirst();
 			getDispatcher().printToProtocol(getNameForProtocol() + "Приготування замовлення");
+			// затримка на приготування страви
 			holdForTime(rnd.next());
-
+			// додає страву у чергу замовлень на видачу
 			readyOrderAmount.add(order);
 			getDispatcher().printToProtocol(getNameForProtocol() + "Замовлення готове");
 		}

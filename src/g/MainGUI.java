@@ -228,7 +228,7 @@ public class MainGUI extends JFrame {
 		gbl_diagramChief.columnWeights = new double[] { 0.0, 0.0, 0.0 };
 		gbl_diagramChief.columnWidths = new int[] { 9, 0, 289 };
 		diagramChief.getDiagramPanel().setBackground(new Color(255, 255, 204));
-		diagramChief.setTitleText("\u0427\u0435\u0440\u0433\u0430 \u043A\u0443\u0445\u0430\u0440\u0456\u0432");
+		diagramChief.setTitleText("\u0427\u0435\u0440\u0433\u0430 \u0437\u0430\u043C\u0432\u043B\u0435\u043D\u044C \u043D\u0430 \u043A\u0443\u0445\u043D\u0456");
 		diagramChief.setPainterColor(Color.ORANGE);
 		diagramChief.setGridColor(new Color(204, 204, 204));
 
