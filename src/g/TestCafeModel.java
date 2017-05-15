@@ -314,11 +314,11 @@ public class TestCafeModel implements IStatisticsable, IExperimentable{
 		map.put("Гістограма для черги вільних офіціантів", getHistoForQueueFreeWaiter());
 		map.put("Гістограма для черги відвідувачів, що чекають на вільного офіціанта", getHistoForQueueNewVisitor());
 		map.put("Гістограма для черги замовлень на приготування", getHistoForQueueToChief());
-		map.put("Гістограма для затримки на очікування офіціанта відвідувачем", getHistoWaitingForWaiter());
+//		map.put("Гістограма для затримки на очікування офіціанта відвідувачем", getHistoWaitingForWaiter());
 		map.put("Гістограма для затримки на очікування відвідувача офіціантом", getHistoForQueueNewVisitor());
-		map.put("Гістограма для затримки на приготування одного замовлення", getHistoCookingTime());
-		map.put("Гістограма для затримки на тривалість трапези", getHistoEatingTime());
-		map.put("Гістограма для затримки на очікування замовлення відвідувачем", getHistoWaitingForOrder());
+//		map.put("Гістограма для затримки на приготування одного замовлення", getHistoCookingTime());
+//		map.put("Гістограма для затримки на тривалість трапези", getHistoEatingTime());
+//		map.put("Гістограма для затримки на очікування замовлення відвідувачем", getHistoWaitingForOrder());
 		return map;
 	}
 	

@@ -80,7 +80,7 @@ public class Waiter extends Actor {
 				// додати візітора в чергу на очікування замовлення
 				waitingForOrder.add(visitor);
 				// додати візітора в чергу до кухаря
-				queueToChief.add(visitor);
+				queueToChief.add(visitor);  
 			}
 
 			else {

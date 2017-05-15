@@ -59,7 +59,9 @@ public class Visitor extends Actor {
 	}
 
 	private void initConditions() {
+		// перев≥рка, чи Ї в≥льн≥ м≥сц€ у кафе
 		c = () -> visitorInCafe.size() < maxSits;
+		// перев≥рка, чи винесли в≥дв≥дувачу страву
 		c2 = () -> food;
 	}
 
@@ -68,16 +70,18 @@ public class Visitor extends Actor {
 		// Ќј ¬”Ћ»÷≤
 
 		initConditions();
-		// в≥з≥тор п≥д≥йшов до кафе
+		// в≥з≥тор п≥д≥йшов до кафе, додаЇ себе у чергу на вх≥д у кафе
 		queueNewVisitor.addLast(this);
+		// перев≥р€Ї, чи Ї м≥сц€ у кафе:
+		// waiterMaxTime - критичний час на оч≥куванн€ в≥льного м≥сц€ у кафе
 		waitForConditionOrHoldForTime(c, "ћають бути м≥сц€ в кафе", waiterMaxTime);
 
 		// ”  ј‘≈
-		// в≥з≥тор зайшов у кафе
+		// в≥з≥тор зайшов у кафе, видал€Ї себе з черги на вх≥д у кафе
 		queueNewVisitor.remove(this);
-
+		
+		// €кщо м≥сц€ були ≥ 
 		if (c.getAsBoolean()) {
-
 			// новий в≥з≥тор у кафе
 			visitorInCafe.add(this);
 			// додаЇ себе у чергу в≥з≥тор≥в на обслуговуванн€
