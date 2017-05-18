@@ -28,6 +28,7 @@ public class Generator extends Actor {
 			String name = "Відвідувач " + ++n;
 			Visitor visitor = new Visitor(name, gui, model);
 			visitor.setStartTime(getDispatcher().getCurrentTime());
+			visitor.setFinishTime(finishTime);
 			getDispatcher().addStartingActor(visitor);
 			holdForTime(rnd.next());
 		}

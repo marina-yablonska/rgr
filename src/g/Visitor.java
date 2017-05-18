@@ -10,11 +10,7 @@ import rnd.Randomable;
 
 public class Visitor extends Actor {
 
-	int id_Visitor;
-
-	// private double waitingForWaiter;
 	private double waiterMaxTime;
-	// private double waitingForOrder;
 	private double orderMaxTime;
 	private Randomable rnd;
 	private double birthTime;
@@ -25,13 +21,18 @@ public class Visitor extends Actor {
 	private QueueForTransactions<Visitor> waitingForOrder;
 	private Store eatingVisitor;
 	private boolean food = false;
+	private TestCafeModel model;
 
 	private QueueForTransactions<Visitor> queueNewVisitor;
 	private QueueForTransactions<Visitor> visitorInCafe;
 	private QueueForTransactions<Visitor> visitorWaitingForWaiter;
 
 	private int maxSits;
-
+	
+	private double time1;
+	private double time2;
+	private double finishTime;
+	
 	public double getBirthTime() {
 		return birthTime;
 	}
@@ -55,6 +56,7 @@ public class Visitor extends Actor {
 		waitingForOrder = model.getWaitingForOrder();
 		// setWaitingForVisitorHisto(model.getWaitingForVisitorHisto());
 		maxSits = gui.getChooseDataSits().getInt();
+		this.model = model;
 
 	}
 
@@ -84,6 +86,7 @@ public class Visitor extends Actor {
 		if (c.getAsBoolean()) {
 			// новий візітор у кафе
 			visitorInCafe.add(this);
+			this.time1 = getDispatcher().getCurrentTime();
 			// додає себе у чергу візіторів на обслуговування
 			visitorWaitingForWaiter.add(this);
 		} else {
@@ -105,6 +108,8 @@ public class Visitor extends Actor {
 			// поїв і віднімає зі Store відвідувачів, що їдять
 			eatingVisitor.remove(1);
 			getDispatcher().printToProtocol(getNameForProtocol() + "Відвідувач розрахувався і залишив кафе");
+			this.time2 = getDispatcher().getCurrentTime();
+			model.getHistoWaitingForOrderForRegres().add(time2 - time1);
 		} else {
 			// візітор не дочекався замовлення і додав себе у Store
 			// відвідувачів, що пішли
@@ -113,6 +118,7 @@ public class Visitor extends Actor {
 		}
 		// відвідувач покинув кафе
 		visitorInCafe.remove(this);
+		
 	}
 
 	public void setStartTime(double currentTime) {
@@ -125,6 +131,14 @@ public class Visitor extends Actor {
 
 	public void setFood(boolean food) {
 		this.food = food;
+	}
+
+	public double getFinishTime() {
+		return finishTime;
+	}
+
+	public void setFinishTime(double finishTime) {
+		this.finishTime = finishTime;
 	}
 
 }

@@ -15,7 +15,7 @@ import widgets.experiments.IExperimentable;
 import widgets.stat.IStatisticsable;
 import widgets.trans.ITransProcesable;
 
-public class TestCafeModel implements IStatisticsable, IExperimentable {
+public class TestCafeModel implements IStatisticsable, IExperimentable, ITransProcesable {
 
 	private Dispatcher dispatcher;
 	private MainGUI gui;
@@ -55,6 +55,13 @@ public class TestCafeModel implements IStatisticsable, IExperimentable {
 	private Histo histoCookingTime;
 	private Histo histoWaitingForOrder;
 	private Histo histoEatingTime;
+	private Histo histoWaitingForOrderForRegres;
+
+	public Histo getHistoWaitingForOrderForRegres() {
+		if (histoWaitingForOrderForRegres == null)
+			histoWaitingForOrderForRegres = new Histo();
+		return histoWaitingForOrderForRegres;
+	}
 
 	public TestCafeModel(Dispatcher d, MainGUI mainGUI) {
 		if (d == null || mainGUI == null) {
@@ -79,7 +86,7 @@ public class TestCafeModel implements IStatisticsable, IExperimentable {
 
 	}
 
-	private Actor getMultiWaiter() {
+	private MultiActor getMultiWaiter() {
 		if (multiWaiter == null) {
 			multiWaiter = new MultiActor();
 			multiWaiter.setNameForProtocol("MultiActor для офіціантів");
@@ -89,21 +96,21 @@ public class TestCafeModel implements IStatisticsable, IExperimentable {
 		return multiWaiter;
 	}
 
-	private Actor getWaiter() {
+	private Waiter getWaiter() {
 		if (waiter == null) {
 			waiter = new Waiter("Waiter", gui, this);
 		}
 		return waiter;
 	}
 
-	private Actor getGenerator() {
+	private Generator getGenerator() {
 		if (generator == null) {
 			generator = new Generator("Generator", gui, this);
 		}
 		return generator;
 	}
 
-	private Actor getChief() {
+	private Chief getChief() {
 		if (chief == null) {
 			chief = new Chief("Chief", gui, this);
 		}
@@ -111,7 +118,7 @@ public class TestCafeModel implements IStatisticsable, IExperimentable {
 	}
 
 	// Мультикухар
-	private Actor getMultiChief() {
+	private MultiActor getMultiChief() {
 		if (multiChief == null) {
 			multiChief = new MultiActor();
 			multiChief.setNameForProtocol("MultiActor для шеф-кухарів");
@@ -121,11 +128,19 @@ public class TestCafeModel implements IStatisticsable, IExperimentable {
 		return multiChief;
 	}
 
-	private Actor getVisitor() {
+	private Visitor getVisitor() {
 		if (visitor == null) {
 			visitor = new Visitor("Visitor", gui, this);
 		}
 		return visitor;
+	}
+	
+	public void setVisitor(Visitor visitor) {
+		this.visitor = visitor;
+	}
+
+	public void setWaiter(Waiter waiter) {
+		this.waiter = waiter;
 	}
 
 	public QueueForTransactions<Visitor> getReadyOrderAmount() {
@@ -333,13 +348,13 @@ public class TestCafeModel implements IStatisticsable, IExperimentable {
 	@Override
 	public Map<String, Double> getResultOfExperiment() {
 		Map<String, Double> map = new HashMap<>();
-		map.put("Черга вільних офіціантів від їх к-сті", getHistoForQueueFreeWaiter().getAverage());
-		map.put("Черга нових відвідувачів від к-сті офіціантів", getHistoForQueueNewVisitor().getAverage());
+		map.put("Залежність часу перебування у кафе від к-сті офіціантів і кухарів", getHistoWaitingForOrderForRegres().getAverage());
+		//map.put("Черга нових відвідувачів від к-сті офіціантів", getHistoForQueueNewVisitor().getAverage());
 		// map.put("Черга замовлень на приготування",
 		// getHistoForQueueToChief().getAverage());
-		map.put("Час очікування відвідувачем обслуговування від к-сті офіціантів",
-				getHistoWaitingForWaiter().getAverage());
-		map.put("Час очікування офіціантом відвідувача від к-сті офіціантів", getHistoWaitingForVisitor().getAverage());
+		//map.put("Час очікування відвідувачем обслуговування від к-сті офіціантів",
+//				getHistoWaitingForWaiter().getAverage());
+//		map.put("Час очікування офіціантом відвідувача від к-сті офіціантів", getHistoWaitingForVisitor().getAverage());
 		// map.put("Затримка на приготування одного замовлення",
 		// getHistoCookingTime().getAverage());
 		// map.put("Затримка на тривалість трапези",
@@ -348,4 +363,26 @@ public class TestCafeModel implements IStatisticsable, IExperimentable {
 		// getHistoWaitingForOrder().getAverage());
 		return map;
 	}
+	
+	@Override
+	public void initForTrans(double finishTime) {
+		getVisitor().setFinishTime(finishTime);
+		getWaiter().setFinishTime(finishTime);
+		gui.getChooseDataTime().setDouble(finishTime);
+	}
+
+	@Override
+	public void resetTransAccum() {
+		getQueueFreeWaiter().resetAccum();
+		getQueueNewVisitor().resetAccum();
+	}
+
+	@Override
+	public Map<String, Double> getTransResult() {
+		Map<String, Double> map = new HashMap<>();
+		map.put("Queue for packing", getQueueFreeWaiter().getAccumAverage());
+		map.put("Queue for setup", getQueueNewVisitor().getAccumAverage());
+		return map;
+	}
+	
 }

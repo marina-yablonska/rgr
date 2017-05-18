@@ -18,18 +18,14 @@ import rnd.Randomable;
 public class Waiter extends Actor {
 
 	private double finishTime;
-	private Store orderToGoCount;
 	private BooleanSupplier isVisitor;
 	private BooleanSupplier isOrder;
-	private double maxSits;
 	private Randomable rnd;
 	private boolean food;
 
 	private QueueForTransactions<Visitor> readyOrderAmount;
 	private QueueForTransactions<Waiter> queueFreeWaiter;
-	private QueueForTransactions<Visitor> queueNewVisitor;
 	private QueueForTransactions<Visitor> queueToChief;
-	private QueueForTransactions<Visitor> visitorInCafe;
 	private QueueForTransactions<Visitor> visitorWaitingForWaiter;
 	private QueueForTransactions<Visitor> waitingForOrder;
 	private BooleanSupplier isWork;
@@ -37,19 +33,13 @@ public class Waiter extends Actor {
 	public Waiter(String name, MainGUI gui, TestCafeModel model) {
 		super();
 		setNameForProtocol(name);
-		// visitorInCafe = model.getVisitorInCafe();
-		orderToGoCount = model.getOrderToGoCount();
 		queueFreeWaiter = model.getQueueFreeWaiter();
 		queueToChief = model.getQueueToChief();
-		queueNewVisitor = model.getQueueNewVisitor();
 		finishTime = gui.getChooseDataTime().getDouble();
-		maxSits = gui.getChooseDataSits().getDouble();
 		rnd = gui.getChooseRandomWaiterSpeed().getRandom();
-		visitorInCafe = model.getVisitorInCafe();
 		visitorWaitingForWaiter = model.getVisitorWaitingForWaiter();
 		waitingForOrder = model.getWaitingForOrder();
 		readyOrderAmount = model.getReadyOrderAmount();
-		// setWaitingForVisitorHisto(model.getWaitingForVisitorHisto());
 	}
 
 	private void initConditions() {
@@ -72,7 +62,7 @@ public class Waiter extends Actor {
 				return;
 			} 	
 			//офіціант видаляє себе з черги вільних офіціантів
-			//queueFreeWaiter.remove(this);
+			queueFreeWaiter.remove(this);
 			
 			//перевірка виконання умови на появу відвідувача
 			if (isVisitor.getAsBoolean()) {
@@ -105,8 +95,11 @@ public class Waiter extends Actor {
 			}
 		}
 	}
-
-	public void setFinishTime(double finishTime2) {
-		this.finishTime = finishTime2;
+	public void setFinishTime(double finishTime) {
+		this.finishTime = finishTime;
+	}
+	
+	public double getFinishTime() {
+		return finishTime;
 	}
 }

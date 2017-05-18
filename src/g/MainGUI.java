@@ -139,7 +139,7 @@ public class MainGUI extends JFrame {
 		panelTest.add(diagramQueueVisitor);
 
 		diagramQueueWaiter = new Diagram();
-		diagramQueueWaiter.setVerticalMaxText("2");
+		diagramQueueWaiter.setVerticalMinText("3");
 		diagramQueueWaiter.setBounds(343, 0, 349, 164);
 		diagramQueueWaiter.setHorizontalMaxText("50");
 		GridBagLayout gbl_diagramQueueWaiter = (GridBagLayout) diagramQueueWaiter.getLayout();
@@ -186,7 +186,8 @@ public class MainGUI extends JFrame {
 		panelTest.add(diagramGoneVisitor);
 
 		diagramWaitingForOrder = new Diagram();
-		diagramWaitingForOrder.setVerticalMaxText("10");
+		diagramWaitingForOrder.setVerticalMinText("2");
+		diagramWaitingForOrder.setVerticalMaxText("12");
 		GridBagLayout gbl_diagramWaitingForOrder = (GridBagLayout) diagramWaitingForOrder.getLayout();
 		gbl_diagramWaitingForOrder.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0 };
 		gbl_diagramWaitingForOrder.rowHeights = new int[] { 0, 13, 34, -42 };
@@ -218,7 +219,8 @@ public class MainGUI extends JFrame {
 		panelTest.add(diagramEatingVisitor);
 
 		diagramChief = new Diagram();
-		diagramChief.setVerticalMaxText("10");
+		diagramChief.setVerticalMinText("1");
+		diagramChief.setVerticalMaxText("11");
 		diagramChief.setBounds(343, 163, 343, 164);
 		panelTest.add(diagramChief);
 		diagramChief.setHorizontalMaxText("50");
@@ -375,12 +377,12 @@ public class MainGUI extends JFrame {
 				getDiagramQueueVisitor().setHorizontalMaxText(txt);
 				getDiagramQueueWaiter().setHorizontalMaxText(txt);
 				getDiagramWaitingForOrder().setHorizontalMaxText(txt);
-				String w = chooseDataWaiter.getText();
-				getDiagramQueueWaiter().setVerticalMaxText(w);
+//				String w = chooseDataWaiter.getText();
+//				getDiagramQueueWaiter().setVerticalMaxText(w);
 				String v = chooseDataSits.getText();
 				getDiagramEatingVisitor().setVerticalMaxText(v);
 				getDiagramQueueVisitor().setVerticalMaxText(v);
-				getDiagramWaitingForOrder().setVerticalMaxText(v);
+//				getDiagramWaitingForOrder().setVerticalMaxText(v);
 				getDiagramChief().setVerticalMaxText(v);
 			}
 		} catch (Exception e) {
